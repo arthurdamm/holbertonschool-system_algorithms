@@ -39,7 +39,7 @@ int rb_tree_is_valid(const rb_tree_t *tree)
 {
 	size_t num_black = 0;
 
-	if (!tree)
-		return (1);
+	if (!tree || tree->color != BLACK)
+		return (0);
 	return (_rb_tree_is_valid(tree, &num_black));
 }
