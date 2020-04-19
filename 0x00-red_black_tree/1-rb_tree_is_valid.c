@@ -25,7 +25,6 @@ int _rb_tree_is_valid(const rb_tree_t *tree, size_t *num_black)
 		!_rb_tree_is_valid(tree->right, &num_black_right) ||
 		*num_black != num_black_right)
 		return (0);
-	*num_black = MAX(*num_black, num_black_right);
 	if (tree->color == BLACK)
 		*num_black += 1;
 	return (1);
