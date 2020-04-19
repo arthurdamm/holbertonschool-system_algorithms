@@ -3,18 +3,15 @@
 /**
  * _rb_tree_is_valid - recursively valildates RB tree properties
  * @tree: pointer to root of tree to validate
+ * @num_black: number of black nodes, passed by address
  * Return: 1 if valid else 0
  */
-int _rb_tree_is_valid(const rb_tree_t *tree, size_t *min_height, size_t *max_height)
+int _rb_tree_is_valid(const rb_tree_t *tree, size_t *num_black)
 {
-	size_t min_height_right = 0, max_height_right = 0;
-	short valid = 0;
+	size_t num_black_right = 0;
 
 	if (!tree)
-	{
-		*min_height = *max_height = 0;
-		return (1);
-	}
+		return (*num_black = 1);
 	if (tree->color != RED && tree->color != BLACK)
 		return (0);
 	if (tree->color == RED)
@@ -24,13 +21,14 @@ int _rb_tree_is_valid(const rb_tree_t *tree, size_t *min_height, size_t *max_hei
 		if (tree->right && tree->right->color != BLACK)
 			return (0);
 	}
-	valid |= _rb_tree_is_valid(tree->left, min_height, max_height);
-	valid |= _rb_tree_is_valid(tree->right, &min_height_right, &max_height_right);
-	if (!valid)
+	if (!_rb_tree_is_valid(tree->left, num_black) ||
+		!_rb_tree_is_valid(tree->right, &num_black_right) ||
+		*num_black != num_black_right)
 		return (0);
-	*min_height = 1 + MIN(*min_height, min_height_right);
-	*max_height = 1 + MAX(*max_height, max_height_right);
-	return (*max_height <= *min_height * 2);
+	*num_black = MAX(*num_black, num_black_right);
+	if (tree->color == BLACK)
+		*num_black += 1;
+	return (1);
 }
 
 /**
@@ -40,9 +38,9 @@ int _rb_tree_is_valid(const rb_tree_t *tree, size_t *min_height, size_t *max_hei
  */
 int rb_tree_is_valid(const rb_tree_t *tree)
 {
-	size_t min_height = 0, max_height = 0;
+	size_t num_black = 0;
 
 	if (!tree)
 		return (0);
-	return (_rb_tree_is_valid(tree, &min_height, &max_height));
+	return (_rb_tree_is_valid(tree, &num_black));
 }

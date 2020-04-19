@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#define MIN(x, y) ((x) > (y) ? (y) : (x))
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
+
 /**
  * enum rb_color_e - Possible color of a Red-Black tree
  *
@@ -37,8 +40,9 @@ typedef struct rb_tree_s
 	struct rb_tree_s *right;
 } rb_tree_t;
 
-rb_tree_t *rb_tree_node(rb_tree_t *parent, int value, rb_color_t color);
-
 void rb_tree_print(const rb_tree_t *tree);
+
+rb_tree_t *rb_tree_node(rb_tree_t *parent, int value, rb_color_t color);
+int rb_tree_is_valid(const rb_tree_t *tree);
 
 #endif
