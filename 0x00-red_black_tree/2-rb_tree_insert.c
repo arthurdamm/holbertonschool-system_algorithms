@@ -53,11 +53,11 @@ rb_tree_t *rb_tree_insert_fix(rb_tree_t **tree, rb_tree_t *node)
 		/* printf("WHILE:[%d] PARENT[%d]\n", node->n, node->parent->n); */
 		if (node->parent->parent->left == node->parent)
 		{
-			fix_right_uncle(tree, node);
+			node = fix_right_uncle(tree, node);
 		}
 		else
 		{
-			fix_left_uncle(tree, node);
+			node = fix_left_uncle(tree, node);
 		}
 	}
 	(*tree)->color = BLACK;
