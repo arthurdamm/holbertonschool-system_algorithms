@@ -8,8 +8,11 @@
  */
 rb_tree_t *rb_tree_insert(rb_tree_t **tree, int value)
 {
-	rb_tree_t *node, *prev = NULL, *curr = *tree;
+	rb_tree_t *node, *prev = NULL, *curr;
 
+	if (!tree)
+		return (NULL);
+	curr = *tree;
 	while (curr)
 	{
 		prev = curr;
