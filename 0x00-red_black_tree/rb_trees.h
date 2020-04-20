@@ -44,11 +44,14 @@ void rb_tree_print(const rb_tree_t *tree);
 
 rb_tree_t *rb_tree_node(rb_tree_t *parent, int value, rb_color_t color);
 int rb_tree_is_valid(const rb_tree_t *tree);
+
 rb_tree_t *rb_tree_insert(rb_tree_t **tree, int value);
 rb_tree_t *rb_tree_insert_fix(rb_tree_t **tree, rb_tree_t *node);
 rb_tree_t *fix_right_uncle(rb_tree_t **tree, rb_tree_t *node);
 rb_tree_t *fix_left_uncle(rb_tree_t **tree, rb_tree_t *node);
 void left_rotate(rb_tree_t **tree, rb_tree_t *node);
 void right_rotate(rb_tree_t **tree, rb_tree_t *node);
+
+rb_tree_t *array_to_rb_tree(int *array, size_t size);
 
 #endif

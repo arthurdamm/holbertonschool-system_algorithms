@@ -48,7 +48,7 @@ rb_tree_t *rb_tree_insert(rb_tree_t **tree, int value)
  */
 rb_tree_t *rb_tree_insert_fix(rb_tree_t **tree, rb_tree_t *node)
 {
-	while (node->parent->color == RED)
+	while (node->parent && node->parent->color == RED)
 	{
 		/* printf("WHILE:[%d] PARENT[%d]\n", node->n, node->parent->n); */
 		if (node->parent->parent->left == node->parent)
