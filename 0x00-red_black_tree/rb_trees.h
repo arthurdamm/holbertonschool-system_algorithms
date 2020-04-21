@@ -54,4 +54,11 @@ void right_rotate(rb_tree_t **tree, rb_tree_t *node);
 
 rb_tree_t *array_to_rb_tree(int *array, size_t size);
 
+rb_tree_t *rb_tree_remove(rb_tree_t *root, int n);
+void rb_tree_remove_node(rb_tree_t **tree, rb_tree_t *z);
+void rb_tree_remove_fixup(rb_tree_t **tree, rb_tree_t *x);
+rb_tree_t *rb_tree_fix_right_sibling(rb_tree_t **tree, rb_tree_t *x);
+rb_tree_t *rb_tree_fix_left_sibling(rb_tree_t **tree, rb_tree_t *x);
+void rb_tree_replace(rb_tree_t **tree, rb_tree_t *before, rb_tree_t *after);
+
 #endif
