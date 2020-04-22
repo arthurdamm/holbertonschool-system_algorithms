@@ -142,9 +142,10 @@ rb_tree_t *rb_tree_fix_right_sibling(rb_tree_t **tree, rb_tree_t *x,
 			right_rotate(tree, w);
 			w = x_parent->right;
 		}
-		w->color = x_parent->color;
+		if (w)
+			w->color = x_parent->color;
 		x_parent->color = BLACK;
-		if (w->right)
+		if (w && w->right)
 			w->right->color = BLACK;
 		left_rotate(tree, x_parent);
 		x = *tree;
@@ -174,6 +175,8 @@ rb_tree_t *rb_tree_fix_left_sibling(rb_tree_t **tree, rb_tree_t *x,
 		right_rotate(tree, x_parent);
 		w = x_parent->left;
 	}
+	if (!w)
+		return (x);
 	if ((!w->left || w->left->color >= BLACK) &&
 		(!w->right || w->right->color >= BLACK))
 	{

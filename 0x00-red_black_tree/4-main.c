@@ -18,8 +18,8 @@ rb_tree_t *test_random_array(int len, int max, int *_n, int **array);
 int tree_contains(rb_tree_t *tree, int n);
 
 #define VERBOSE 0
-#define _RAND_LEN 50
-#define _RAND_MAX 100
+#define _RAND_LEN 1000
+#define _RAND_MAX 1000
 
 /**
  * main - Entry point
