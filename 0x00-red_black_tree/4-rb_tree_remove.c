@@ -89,12 +89,12 @@ void rb_tree_remove_node(rb_tree_t **tree, rb_tree_t *z)
 void rb_tree_remove_fixup(rb_tree_t **tree, rb_tree_t *x, rb_tree_t *x_parent)
 {
 	while ((x && x != *tree && x->color >= BLACK) || (!x && x_parent))
-		if ((x && x == x->parent->left) || (!x && x_parent && x_parent->right))
+		if ((x && x == x->parent->left) || (!x && x_parent && !x_parent->left))
 		{
 			x = rb_tree_fix_right_sibling(tree, x, x_parent);
 			x_parent = NULL;
 		}
-		else if ((x && x == x->parent->right) || (x_parent && x_parent->left))
+		else if ((x && x == x->parent->right) || (!x && x_parent && x_parent->left))
 		{
 			x = rb_tree_fix_left_sibling(tree, x, x_parent);
 			x_parent = NULL;
