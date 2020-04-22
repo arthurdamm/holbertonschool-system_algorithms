@@ -75,7 +75,7 @@ void rb_tree_remove_node(rb_tree_t **tree, rb_tree_t *z)
 		y->left->parent = y;
 		y->color = z->color;
 	}
-	if (y_color == BLACK)
+	if (y_color >= BLACK)
 		rb_tree_remove_fixup(tree, x, x_parent);
 	free(z);
 }
@@ -88,7 +88,7 @@ void rb_tree_remove_node(rb_tree_t **tree, rb_tree_t *z)
  */
 void rb_tree_remove_fixup(rb_tree_t **tree, rb_tree_t *x, rb_tree_t *x_parent)
 {
-	while ((x && x != *tree && x->color == BLACK) || (!x && x_parent))
+	while ((x && x != *tree && x->color >= BLACK) || (!x && x_parent))
 		if ((x && x == x->parent->left) || (!x && x_parent && x_parent->right))
 		{
 			x = rb_tree_fix_right_sibling(tree, x, x_parent);
@@ -127,15 +127,15 @@ rb_tree_t *rb_tree_fix_right_sibling(rb_tree_t **tree, rb_tree_t *x,
 	}
 	if (!w)
 		return (x);
-	if ((!w->left || w->left->color == BLACK) &&
-		(!w->right || w->right->color == BLACK))
+	if ((!w->left || w->left->color >= BLACK) &&
+		(!w->right || w->right->color >= BLACK))
 	{
 		w->color = RED;
 		x = x_parent;
 	}
 	else
 	{
-		if (!w->right || w->right->color == BLACK)
+		if (!w->right || w->right->color >= BLACK)
 		{
 			w->left->color = BLACK;
 			w->color = RED;
@@ -174,15 +174,15 @@ rb_tree_t *rb_tree_fix_left_sibling(rb_tree_t **tree, rb_tree_t *x,
 		right_rotate(tree, x_parent);
 		w = x_parent->left;
 	}
-	if ((!w->left || w->left->color == BLACK) &&
-		(!w->right || w->right->color == BLACK))
+	if ((!w->left || w->left->color >= BLACK) &&
+		(!w->right || w->right->color >= BLACK))
 	{
 		w->color = RED;
 		x = x_parent;
 	}
 	else
 	{
-		if (!w->left || w->left->color == BLACK)
+		if (!w->left || w->left->color >= BLACK)
 		{
 			w->right->color = BLACK;
 			w->color = RED;
