@@ -3,15 +3,23 @@
 #include <limits.h>
 #include <time.h>
 
-void rb_tree_print(const rb_tree_t *tree);
-rb_tree_t *valid_rb_1(void);
+rb_tree_t *test_case_0(int **_arr, int *_n);
+rb_tree_t *test_case_1(int **_arr, int *_n);
 rb_tree_t *test_case_2(int **_arr, int *_n);
 rb_tree_t *test_case_3(int **_arr, int *_n);
 rb_tree_t *test_case_4(int **_arr, int *_n);
 rb_tree_t *test_case_4b(int **_arr, int *_n);
+rb_tree_t *test_case_5(int **_arr, int *_n);
+rb_tree_t *test_case_random(int **_arr, int *_n);
+int test_tree(rb_tree_t *tree, int *arr, int n);
 int binary_tree_is_bst(const rb_tree_t *tree);
 int *rand_array(int len, int max);
 rb_tree_t *test_random_array(int len, int max, int *_n, int **array);
+int tree_contains(rb_tree_t *tree, int n);
+
+#define VERBOSE 0
+#define _RAND_LEN 50
+#define _RAND_MAX 100
 
 /**
  * main - Entry point
@@ -21,81 +29,102 @@ rb_tree_t *test_random_array(int len, int max, int *_n, int **array);
 int main(void)
 {
 	rb_tree_t *tree;
-	/* int array[] = {
-		79, 47, 68, 87, 84, 91, 21, 32, 34, 2,
-		20, 22
-	}; */
-	int array[] = {
-		10, 6, 5, 11
-	};
-	int *arr = array;
-	int n = sizeof(array) / sizeof(array[0]);
 
-	/* tree = array_to_rb_tree(array, n); */
-	/* tree = valid_rb_1(); */
-	tree = test_random_array(40, 50, &n, &arr);
-	/* tree = test_case_2(&arr, &n); */
-	/* tree = test_case_3(&arr, &n); */
-	/* tree = test_case_4(&arr, &n); */
-	/* tree = test_case_4b(&arr, &n); */
-	if (!tree)
-		return (1);
-	rb_tree_print(tree);
-	if (!rb_tree_is_valid(tree))
+	rb_tree_t *(*test_funcs[])(int **, int *) = {
+		test_case_0,
+		test_case_1,
+		test_case_2,
+		test_case_3,
+		test_case_4,
+		test_case_4b,
+		test_case_5,
+		test_case_random,
+		NULL
+	};
+	int *arr;
+	int n, i;
+	
+	for (i = 0; test_funcs[i]; i++)
 	{
-		printf("Error tree invalid RB!\n");
-		return (0);
-	}
-	else if (!binary_tree_is_bst(tree))
-	{
-		printf("Error tree invalid BST!\n");
-		return (0);
-	}
-	else
-	{
-		printf("\nVALID TREE\n\n");
-	}
-	fflush(stdout);
-	for (n--; n >= 0; n--)
-	{
-		tree = rb_tree_remove(tree, arr[n]);
-		rb_tree_print(tree);
-		printf("REMOVED [%d]\n", arr[n]);
-		if (!rb_tree_is_valid(tree))
-		{
-			printf("Error tree invalid RB!\n");
-			return (0);
-		}
-		else if (!binary_tree_is_bst(tree))
-		{
-			printf("Error tree invalid BST!\n");
-			return (0);
-		}
+		tree = test_funcs[i](&arr, &n);
+		if (!test_tree(tree, arr, n))
+			printf(ARED "TEST [%d] FAILED!\n" RES, i);
+		else
+			printf(GRN "TEST [%d] OK.\n" RES, i);
+		
 	}
 	return (0);
 }
 
-/**
- * valid_rb_1 - Builds a valid R-B tree
- *
- * Return: A pointer to the created tree
- */
-rb_tree_t *valid_rb_1(void)
-{
-	rb_tree_t *root;
 
-	root = rb_tree_node(NULL, 10, BLACK);
-	root->left = rb_tree_node(root, 5, BLACK);
-	root->right = rb_tree_node(root, 11, BLACK);
-	root->left->left = rb_tree_node(root->left, 4, RED);
-	root->left->right = rb_tree_node(root->left, 6, RED);
-	return (root);
+int test_tree(rb_tree_t *tree, int *arr, int n)
+{
+	if (!tree)
+		return (1);
+	if (n < 20 && VERBOSE)
+		rb_tree_print(tree);
+	if (!rb_tree_is_valid(tree))
+	{
+		printf(ARED "Error RECEIVED tree invalid RB!\n" RES);
+		return (0);
+	}
+	else if (!binary_tree_is_bst(tree))
+	{
+		printf(ARED "Error RECEIVED tree invalid BST!\n" RES);
+		return (0);
+	}
+	else if (VERBOSE)
+	{
+		printf(GRN "\nVALID TREE\n\n" RES);
+	}
+	fflush(stdout);
+	for (n--; n >= 0; n--)
+	{
+		int t = arr[n], removed = 0;
+		if (tree_contains(tree, t))
+			removed = 1;
+		tree = rb_tree_remove(tree, t);
+		if (n < 20 && VERBOSE && removed)
+			rb_tree_print(tree);
+		if (VERBOSE && removed)
+			printf(YEL "REMOVED [%d]\n" RES, t);
+		if (tree == NULL)
+			return (1);
+		if (!rb_tree_is_valid(tree))
+		{
+			printf(ARED "Error tree invalid RB!\n" RES);
+			return (0);
+		}
+		else if (!binary_tree_is_bst(tree))
+		{
+			printf(ARED "Error tree invalid BST!\n" RES);
+			return (0);
+		}
+	}
+	return (1);
 }
 
-rb_tree_t *test_case_1(void)
+rb_tree_t *test_case_0(int **_arr, int *_n)
+{
+	int input[] = {
+		79, 47, 68, 87, 84, 91, 21, 32, 34, 2,
+		20, 22
+	};
+	int n = sizeof(input) / sizeof(input[0]);
+	static int arr[] = { 22, 20, 2, 34, 32 };
+
+	*_arr = arr;
+	*_n = sizeof(arr) / sizeof(int);
+	return (array_to_rb_tree(input, n));
+}
+
+rb_tree_t *test_case_1(int **_arr, int *_n)
 {
 	rb_tree_t *root;
+	static int arr[] = {10};
 
+	*_arr = arr;
+	*_n = sizeof(arr) / sizeof(int);
 	root = rb_tree_node(NULL, 10, BLACK);
 	root->left = rb_tree_node(root, 5, BLACK);
 	root->right = rb_tree_node(root, 11, BLACK);
@@ -196,6 +225,22 @@ rb_tree_t *test_case_4b(int **_arr, int *_n)
 	return (root);
 }
 
+rb_tree_t *test_case_5(int **_arr, int *_n)
+{
+	int input[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
+	int n = sizeof(input) / sizeof(input[0]);
+	static int arr[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
+
+	*_arr = arr;
+	*_n = sizeof(arr) / sizeof(int);
+	return (array_to_rb_tree(input, n));
+}
+
+rb_tree_t *test_case_random(int **_arr, int *_n)
+{
+	return (test_random_array(_RAND_LEN, _RAND_MAX, _n, _arr));
+}
+
 rb_tree_t *test_random_array(int len, int max, int *_n, int **array)
 {
 	rb_tree_t *root = NULL;
@@ -205,7 +250,7 @@ rb_tree_t *test_random_array(int len, int max, int *_n, int **array)
 
 	for (n = 0; n < len; n++)
 	{
-		printf("INSERTING [%d]\n", arr[n]);
+		/* printf("INSERTING [%d]\n", arr[n]); */
 		rb_tree_insert(&root, arr[n]);
 	}
 		
@@ -265,4 +310,18 @@ int *rand_array(int len, int max)
 	while (len--)
 		arr[len] = rand() % max;
 	return (arr);
+}
+
+int tree_contains(rb_tree_t *tree, int n)
+{
+	while (tree)
+	{
+		if (n > tree->n)
+			tree = tree->right;
+		else if (n < tree->n)
+			tree = tree->left;
+		else
+			return (1);
+	}
+	return (0);
 }
