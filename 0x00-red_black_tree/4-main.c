@@ -3,6 +3,12 @@
 #include <limits.h>
 #include <time.h>
 
+rb_tree_t *test_remove_case_1_x_red_loop_exits(int **_arr, int *_n);
+rb_tree_t *test_remove_case_2_x_red_loop_exits(int **_arr, int *_n);
+rb_tree_t *test_remove_case_1_x_black_fixup_case_2(int **_arr, int *_n);
+rb_tree_t *test_remove_case_3a_and_4_x_black_fixup_case_2(int **_arr, int *_n);
+rb_tree_t *test_remove_case(int **_arr, int *_n);
+
 rb_tree_t *test_case_0(int **_arr, int *_n);
 rb_tree_t *test_case_1(int **_arr, int *_n);
 rb_tree_t *test_case_2(int **_arr, int *_n);
@@ -11,15 +17,18 @@ rb_tree_t *test_case_4(int **_arr, int *_n);
 rb_tree_t *test_case_4b(int **_arr, int *_n);
 rb_tree_t *test_case_5(int **_arr, int *_n);
 rb_tree_t *test_case_random(int **_arr, int *_n);
+
+void keep_testing();
 int test_tree(rb_tree_t *tree, int *arr, int n);
 int binary_tree_is_bst(const rb_tree_t *tree);
 int *rand_array(int len, int max);
+int rand_int(int max);
 rb_tree_t *test_random_array(int len, int max, int *_n, int **array);
 int tree_contains(rb_tree_t *tree, int n);
 
-#define VERBOSE 0
-#define _RAND_LEN 1000
-#define _RAND_MAX 1000
+#define VERBOSE 1
+#define _RAND_LEN 0
+#define _RAND_MAX 100
 
 /**
  * main - Entry point
@@ -31,6 +40,11 @@ int main(void)
 	rb_tree_t *tree;
 
 	rb_tree_t *(*test_funcs[])(int **, int *) = {
+		test_remove_case_1_x_red_loop_exits,
+		test_remove_case_2_x_red_loop_exits,
+		test_remove_case_1_x_black_fixup_case_2,
+		test_remove_case_3a_and_4_x_black_fixup_case_2,
+		test_remove_case,
 		test_case_0,
 		test_case_1,
 		test_case_2,
@@ -53,9 +67,11 @@ int main(void)
 			printf(GRN "TEST [%d] OK.\n" RES, i);
 		
 	}
+#if _RAND_LEN
+	keep_testing();
+#endif
 	return (0);
 }
-
 
 int test_tree(rb_tree_t *tree, int *arr, int n)
 {
@@ -104,6 +120,30 @@ int test_tree(rb_tree_t *tree, int *arr, int n)
 	return (1);
 }
 
+void keep_testing()
+{
+	int i = 0;
+	rb_tree_t *tree;
+	int n;
+	int *arr;
+
+	while (98)
+	{
+		tree = test_random_array(rand_int(_RAND_LEN), rand_int(_RAND_MAX), &n, &arr);
+		if (!test_tree(tree, arr, n))
+		{
+			printf(ARED "TEST [%d] FAILED!\n" RES, i);
+			printf("ARRAY FOLLOWS:\n");
+			for (i = 0; i < n; i++)
+				printf("%d, ", arr[i]);
+			printf("\n");
+			break;
+		}
+		free(arr);
+		i++;
+	}
+}
+
 rb_tree_t *test_case_0(int **_arr, int *_n)
 {
 	int input[] = {
@@ -116,6 +156,100 @@ rb_tree_t *test_case_0(int **_arr, int *_n)
 	*_arr = arr;
 	*_n = sizeof(arr) / sizeof(int);
 	return (array_to_rb_tree(input, n));
+}
+rb_tree_t *test_remove_case_1_x_red_loop_exits(int **_arr, int *_n)
+{
+	rb_tree_t *root;
+	static int arr[] = {1};
+
+	*_arr = arr;
+	*_n = sizeof(arr) / sizeof(int);
+	root = rb_tree_node(NULL, 3, BLACK);
+	root->left = rb_tree_node(root, 1, BLACK);
+	root->left->right = rb_tree_node(root->left, 2, RED);
+	root->right = rb_tree_node(root, 5, RED);
+	root->right->left = rb_tree_node(root->right, 4, BLACK);
+	root->right->right = rb_tree_node(root->right, 6, BLACK);
+	return (root);
+}
+
+rb_tree_t *test_remove_case_1_x_black_fixup_case_2(int **_arr, int *_n)
+{
+	rb_tree_t *root;
+	static int arr[] = {1};
+
+	*_arr = arr;
+	*_n = sizeof(arr) / sizeof(int);
+	root = rb_tree_node(NULL, 5, BLACK);
+	root->left = rb_tree_node(root, 2, BLACK);
+	root->left->left = rb_tree_node(root->left, 1, BLACK);
+	root->left->right = rb_tree_node(root->left, 3, BLACK);
+	root->right = rb_tree_node(root, 10, RED);
+	root->right->left = rb_tree_node(root->right, 7, BLACK);
+	root->right->left->left = rb_tree_node(root->right->left, 6, BLACK);
+	root->right->left->right = rb_tree_node(root->right->left, 8, BLACK);
+	root->right->right = rb_tree_node(root->right, 15, BLACK);
+	root->right->right->left = rb_tree_node(root->right->right, 14, BLACK);
+	root->right->right->right = rb_tree_node(root->right->right, 16, BLACK);
+	return (root);
+}
+
+rb_tree_t *test_remove_case_3a_and_4_x_black_fixup_case_2(int **_arr, int *_n)
+{
+	rb_tree_t *root;
+	static int arr[] = {2};
+
+	*_arr = arr;
+	*_n = sizeof(arr) / sizeof(int);
+	root = rb_tree_node(NULL, 5, BLACK);
+	root->left = rb_tree_node(root, 2, BLACK);
+	root->left->left = rb_tree_node(root->left, 1, BLACK);
+	root->left->right = rb_tree_node(root->left, 3, BLACK);
+	root->right = rb_tree_node(root, 10, RED);
+	root->right->left = rb_tree_node(root->right, 7, BLACK);
+	root->right->left->left = rb_tree_node(root->right->left, 6, BLACK);
+	root->right->left->right = rb_tree_node(root->right->left, 8, BLACK);
+	root->right->right = rb_tree_node(root->right, 15, BLACK);
+	root->right->right->left = rb_tree_node(root->right->right, 14, BLACK);
+	root->right->right->right = rb_tree_node(root->right->right, 16, BLACK);
+	return (root);
+}
+
+rb_tree_t *test_remove_case(int **_arr, int *_n)
+{
+	rb_tree_t *root;
+	static int arr[] = {3};
+
+	*_arr = arr;
+	*_n = sizeof(arr) / sizeof(int);
+	root = rb_tree_node(NULL, 5, BLACK);
+	root->left = rb_tree_node(root, 2, BLACK);
+	root->left->left = rb_tree_node(root->left, 1, BLACK);
+	root->left->right = rb_tree_node(root->left, 3, BLACK);
+	root->right = rb_tree_node(root, 10, RED);
+	root->right->left = rb_tree_node(root->right, 7, BLACK);
+	root->right->left->left = rb_tree_node(root->right->left, 6, BLACK);
+	root->right->left->right = rb_tree_node(root->right->left, 8, BLACK);
+	root->right->right = rb_tree_node(root->right, 15, BLACK);
+	root->right->right->left = rb_tree_node(root->right->right, 14, BLACK);
+	root->right->right->right = rb_tree_node(root->right->right, 16, BLACK);
+	return (root);
+}
+
+rb_tree_t *test_remove_case_2_x_red_loop_exits(int **_arr, int *_n)
+{
+	rb_tree_t *root;
+	static int arr[] = {2};
+
+	*_arr = arr;
+	*_n = sizeof(arr) / sizeof(int);
+	root = rb_tree_node(NULL, 3, BLACK);
+	root->left = rb_tree_node(root, 2, BLACK);
+	root->left->left = rb_tree_node(root->left, 1, RED);
+	root->right = rb_tree_node(root, 5, RED);
+	root->right->left = rb_tree_node(root->right, 4, BLACK);
+	root->right->right = rb_tree_node(root->right, 6, BLACK);
+	return (root);
 }
 
 rb_tree_t *test_case_1(int **_arr, int *_n)
@@ -310,6 +444,12 @@ int *rand_array(int len, int max)
 	while (len--)
 		arr[len] = rand() % max;
 	return (arr);
+}
+
+int rand_int(int max)
+{
+	srand(time(NULL));
+	return (rand() % max);
 }
 
 int tree_contains(rb_tree_t *tree, int n)
