@@ -26,8 +26,9 @@ int rand_int(int max);
 rb_tree_t *test_random_array(int len, int max, int *_n, int **array);
 int tree_contains(rb_tree_t *tree, int n);
 
-#define VERBOSE 1
-#define _RAND_LEN 0
+#define VERBOSE 0
+#define KEEP_TESTING 0
+#define _RAND_LEN 1000
 #define _RAND_MAX 100
 
 /**
@@ -67,7 +68,7 @@ int main(void)
 			printf(GRN "TEST [%d] OK.\n" RES, i);
 		
 	}
-#if _RAND_LEN
+#if KEEP_TESTING
 	keep_testing();
 #endif
 	return (0);

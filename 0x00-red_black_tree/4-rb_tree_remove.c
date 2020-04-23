@@ -1,12 +1,5 @@
 #include "rb_trees.h"
 
-#define REMOVE_NODE_CASE_1 \
-	do { \
-	x = z->right; \
-	x_parent = z->parent; \
-	rb_tree_replace(tree, z, z->right); } \
-	while (0)
-
 /**
  * rb_tree_remove - removes node from rb tree
  * @root: pointer to root of tree
@@ -43,7 +36,11 @@ void rb_tree_remove_node(rb_tree_t **tree, rb_tree_t *z)
 	int y_color = y->color;
 
 	if (!z->left)
-		REMOVE_NODE_CASE_1;
+	{
+		x = z->right;
+		x_parent = z->parent;
+		rb_tree_replace(tree, z, z->right);
+	}
 	else if (!z->right)
 	{
 		x = z->left;
@@ -52,15 +49,12 @@ void rb_tree_remove_node(rb_tree_t **tree, rb_tree_t *z)
 	}
 	else
 	{
-		y = z->right;
-		while (y && y->left)
-			y = y->left;
+		y = inorder_successor(z);
 		y_color = y->color;
 		x = y->right;
 		if (y->parent == z)
 		{
-			if (x)
-				x->parent = y;
+			x ? x->parent = y : 0;
 			x_parent = y;
 		}
 		else
@@ -219,4 +213,18 @@ void rb_tree_replace(rb_tree_t **tree, rb_tree_t *before, rb_tree_t *after)
 		before->parent->right = after;
 	if (after)
 		after->parent = before->parent;
+}
+
+/**
+ * inorder_successor - finds the inorder successor of given node
+ * @z: the node whose inorder successor to find
+ * Return: the inorder successor
+ */
+rb_tree_t *inorder_successor(rb_tree_t *z)
+{
+	rb_tree_t *y = z->right;
+
+	while (y && y->left)
+		y = y->left;
+	return (y);
 }

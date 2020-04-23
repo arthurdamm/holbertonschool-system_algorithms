@@ -72,5 +72,6 @@ rb_tree_t *rb_tree_fix_right_sibling(rb_tree_t **tree, rb_tree_t *x,
 rb_tree_t *rb_tree_fix_left_sibling(rb_tree_t **tree, rb_tree_t *x,
 	rb_tree_t *x_parent);
 void rb_tree_replace(rb_tree_t **tree, rb_tree_t *before, rb_tree_t *after);
+rb_tree_t *inorder_successor(rb_tree_t *z);
 
 #endif
