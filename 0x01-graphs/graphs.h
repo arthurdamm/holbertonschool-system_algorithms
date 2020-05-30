@@ -47,10 +47,10 @@ typedef struct edge_s
  */
 struct vertex_s
 {
-	size_t	  index;
-	char		*content;
-	size_t	  nb_edges;
-	edge_t	  *edges;
+	size_t	index;
+	char	*content;
+	size_t	nb_edges;
+	edge_t	*edges;
 	struct vertex_s *next;
 };
 
@@ -63,7 +63,7 @@ struct vertex_s
  */
 typedef struct graph_s
 {
-	size_t	  nb_vertices;
+	size_t	nb_vertices;
 	vertex_t	*vertices;
 } graph_t;
 
