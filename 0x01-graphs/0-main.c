@@ -20,6 +20,8 @@ int main(void)
 	}
 
 	printf("Successfully created graph\n");
+	printf("size:[%lu] v:[%p]\n", graph->nb_vertices, (void *)graph->vertices);
+	graph_display(graph);
 
 	return (EXIT_SUCCESS);
 }
