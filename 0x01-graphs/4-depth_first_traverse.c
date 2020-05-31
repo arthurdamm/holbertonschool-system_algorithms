@@ -26,15 +26,14 @@ size_t dfs(vertex_t *vertex, void (*action)(const vertex_t *v, size_t depth),
 	edge_t *edge;
 	size_t max_depth = depth;
 
-	if (visited[vertex->index])
-		return (0);
+	if (!vertex || visited[vertex->index])
+		return (depth > 1 ? depth - 1 : 0);
 	visited[vertex->index] = 1;
 	action(vertex, depth);
 	for (edge = vertex->edges; edge; edge = edge->next)
 		max_depth = max(dfs(edge->dest, action, depth + 1), max_depth);
 	return (max_depth);
 }
-
 
 /**
  * depth_first_traverse - DFS
