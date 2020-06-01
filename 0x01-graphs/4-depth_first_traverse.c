@@ -44,20 +44,14 @@ size_t dfs(vertex_t *vertex, void (*action)(const vertex_t *v, size_t depth),
 size_t depth_first_traverse(const graph_t *graph,
 	void (*action)(const vertex_t *v, size_t depth))
 {
-	vertex_t *vertex;
-	size_t max_depth = 0, nb_vertices = 0;
+	size_t max_depth = 0;
 
 	if (!graph || !action)
 		return (0);
-	for (vertex = graph->vertices; vertex; vertex = vertex->next)
-		nb_vertices++;
-	if (!nb_vertices)
-		return (0);
-	visited = calloc(nb_vertices, sizeof(size_t));
+	visited = calloc(graph->nb_vertices, sizeof(size_t));
 	if (!visited)
 		return (0);
-	for (vertex = graph->vertices; vertex; vertex = vertex->next)
-		max_depth = max(dfs(vertex, action, 0), max_depth);
+	max_depth = max(dfs(graph->vertices, action, 0), max_depth);
 	free(visited);
 	return (max_depth);
 }
