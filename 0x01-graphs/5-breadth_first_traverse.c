@@ -69,7 +69,7 @@ size_t breadth_first_traverse(const graph_t *graph,
 	void (*action)(const vertex_t *v, size_t depth))
 {
 	queue_t *queue;
-	vertex_t *vertex, *node_vertex;
+	vertex_t *node_vertex;
 	edge_t *edge;
 	size_t max_depth = 0, node_depth, i, sz;
 
@@ -81,27 +81,21 @@ size_t breadth_first_traverse(const graph_t *graph,
 	queue = calloc(1, sizeof(queue_t));
 	if (!queue)
 		return (free(visited), 0);
-	for (vertex = graph->vertices; vertex; vertex = vertex->next)
+	visited[graph->vertices->index] = 1;
+	queue_push(queue, graph->vertices, 0);
+	while (queue->size)
 	{
-		if (!visited[vertex->index])
+		for (i = 0, sz = queue->size; i < sz; i++)
 		{
-			visited[vertex->index] = 1;
-			queue_push(queue, vertex, 0);
-		}
-		while (queue->size)
-		{
-			for (i = 0, sz = queue->size; i < sz; i++)
+			queue_pop(queue, &node_vertex, &node_depth);
+			action(node_vertex, node_depth);
+			max_depth = max_depth > node_depth ? max_depth : node_depth;
+			for (edge = node_vertex->edges; edge; edge = edge->next)
 			{
-				queue_pop(queue, &node_vertex, &node_depth);
-				action(node_vertex, node_depth);
-				max_depth = max_depth > node_depth ? max_depth : node_depth;
-				for (edge = node_vertex->edges; edge; edge = edge->next)
-				{
-					if (visited[edge->dest->index])
-						continue;
-					visited[edge->dest->index] = 1;
-					queue_push(queue, edge->dest, node_depth + 1);
-				}
+				if (visited[edge->dest->index])
+					continue;
+				visited[edge->dest->index] = 1;
+				queue_push(queue, edge->dest, node_depth + 1);
 			}
 		}
 	}
