@@ -3,6 +3,24 @@
 static size_t *visited;
 
 /**
+ * queue_free - frees the queue
+ * @queue: pointer to queue
+ */
+void queue_free(queue_t *queue)
+{
+	node_t *node, *node_temp;
+
+	node = queue->head;
+	while (node)
+	{
+		node_temp = node;
+		node = node->next;
+		free(node_temp);
+	}
+	free(queue);
+}
+
+/**
  * queue_push - pushes node onto queue
  * @queue: address of queue
  * @vertex: address of vertex
@@ -16,7 +34,8 @@ int queue_push(queue_t *queue, vertex_t *vertex, size_t depth)
 	node = calloc(1, sizeof(node_t));
 	if (!node)
 	{
-		/* free queue */
+		queue_free(queue);
+		free(visited);
 		return (0);
 	}
 	node->vertex = vertex;
@@ -95,10 +114,12 @@ size_t breadth_first_traverse(const graph_t *graph,
 				if (visited[edge->dest->index])
 					continue;
 				visited[edge->dest->index] = 1;
-				queue_push(queue, edge->dest, node_depth + 1);
+				if (!queue_push(queue, edge->dest, node_depth + 1))
+					return (0);
 			}
 		}
 	}
 	free(visited);
+	queue_free(queue);
 	return (max_depth);
 }
