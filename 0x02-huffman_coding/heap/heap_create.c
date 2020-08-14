@@ -9,8 +9,6 @@ heap_t *heap_create(int (*data_cmp)(void *, void *))
 {
 	heap_t *heap = NULL;
 
-	if (!data_cmp)
-		return (NULL);
 	heap = malloc(sizeof(heap));
 	if (!heap)
 		return (NULL);
