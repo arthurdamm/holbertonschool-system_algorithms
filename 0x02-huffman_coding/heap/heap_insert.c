@@ -53,7 +53,7 @@ binary_tree_node_t *heap_insert(heap_t *heap, void *data)
 		node->left = new_node;
 	new_node->parent = node;
 	node = new_node;
-	while (node->parent && heap->data_cmp(node->parent->data, node->data) >= 0)
+	while (node->parent && heap->data_cmp(node->parent->data, node->data) > 0)
 	{
 		temp = node->data;
 		node->data = node->parent->data;
