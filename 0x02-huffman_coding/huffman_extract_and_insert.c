@@ -18,13 +18,13 @@ int huffman_extract_and_insert(heap_t *priority_queue)
 		return (0);
 	symbol = symbol_create(-1,
 		((symbol_t *)node1->data)->freq + ((symbol_t *)node2->data)->freq);
-	free_data(node1);
-	free_data(node2);
 	if (!symbol)
 		return (0);
 	nested = binary_tree_node(NULL, symbol);
 	if (!nested)
 		return (free(symbol), 0);
+	nested->left = node1;
+	nested->right = node2;
 	if (heap_insert(priority_queue, nested))
 		return (1);
 	return (0);
