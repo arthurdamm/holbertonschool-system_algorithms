@@ -21,5 +21,6 @@ int data_cmp(void *node_a, void *node_b);
 void free_data(void *data);
 heap_t *huffman_priority_queue(char *data, size_t *freq, size_t size);
 int huffman_extract_and_insert(heap_t *priority_queue);
+binary_tree_node_t *huffman_tree(char *data, size_t *freq, size_t size);
 
 #endif
