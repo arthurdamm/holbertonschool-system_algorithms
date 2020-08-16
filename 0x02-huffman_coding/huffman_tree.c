@@ -10,6 +10,7 @@
 binary_tree_node_t *huffman_tree(char *data, size_t *freq, size_t size)
 {
 	heap_t *heap = huffman_priority_queue(data, freq, size);
+	binary_tree_node_t *root;
 
 	setbuf(stdout, NULL);
 	if (!heap)
@@ -19,5 +20,8 @@ binary_tree_node_t *huffman_tree(char *data, size_t *freq, size_t size)
 		if (!huffman_extract_and_insert(heap))
 			return (NULL);
 	}
-	return (heap->root->data);
+	root = heap->root->data;
+	free(heap->root);
+	free(heap);
+	return (root);
 }
