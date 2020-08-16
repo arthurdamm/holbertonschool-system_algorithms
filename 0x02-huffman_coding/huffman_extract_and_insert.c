@@ -25,6 +25,8 @@ int huffman_extract_and_insert(heap_t *priority_queue)
 		return (free(symbol), 0);
 	nested->left = node1;
 	nested->right = node2;
+	node1->parent = nested;
+	node2->parent = nested;
 	if (heap_insert(priority_queue, nested))
 		return (1);
 	return (0);
