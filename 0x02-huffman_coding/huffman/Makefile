@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic -std=gnu90 -ggdb3
+CFLAGS = -Wall -Werror -Wextra -pedantic
 
 SRC0 = huffman.c
 OBJ0 = $(SRC0:.c=.o)
@@ -20,5 +20,5 @@ fclean: clean oclean
 
 re: oclean all
 
-huffman: ../huffman.h $(OBJ0)
+huffman: $(OBJ0)
 	$(CC) $(OBJ0) -o $(NAME0)
