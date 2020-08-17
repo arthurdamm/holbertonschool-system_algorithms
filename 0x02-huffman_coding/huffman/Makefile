@@ -20,5 +20,5 @@ fclean: clean oclean
 
 re: oclean all
 
-huffman: huffman.h $(OBJ0)
+huffman: ../huffman.h $(OBJ0)
 	$(CC) $(OBJ0) -o $(NAME0)

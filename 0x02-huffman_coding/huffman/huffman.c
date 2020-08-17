@@ -1,4 +1,4 @@
-#include "huffman.h"
+#include "../huffman.h"
 #include <unistd.h>
 
 #define USAGE "./huffman <mode> <filename> <out_filename>\n"
