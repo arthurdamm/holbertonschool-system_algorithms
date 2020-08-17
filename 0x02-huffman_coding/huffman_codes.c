@@ -33,10 +33,14 @@ void print_huffman_codes(binary_tree_node_t *tree, unsigned long path)
 		return;
 	symbol = tree->data;
 	if (symbol->data != -1)
+	{
 		printf("%c: %s\n", symbol->data, convert(path, 2));
+	}
 	else
 	{
 		print_huffman_codes(tree->left, path << 1);
 		print_huffman_codes(tree->right, (path << 1) + 1);
 	}
+	free(symbol);
+	free(tree);
 }
