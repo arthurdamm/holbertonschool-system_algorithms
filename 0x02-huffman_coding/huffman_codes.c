@@ -16,7 +16,7 @@ int huffman_codes(char *data, size_t *freq, size_t size)
 
 	if (!tree)
 		return (0);
-	print_huffman_codes(tree, 0);
+	print_huffman_codes(tree, 1);
 	return (1);
 }
 
@@ -24,6 +24,7 @@ int huffman_codes(char *data, size_t *freq, size_t size)
  * print_huffman_codes - walks the tree to print the huffman codes
  * @tree: pointer to current tree node
  * @path: long int holding binary representation of path
+ * @depth: depth of node in case of 0
  */
 void print_huffman_codes(binary_tree_node_t *tree, unsigned long path)
 {
@@ -34,7 +35,7 @@ void print_huffman_codes(binary_tree_node_t *tree, unsigned long path)
 	symbol = tree->data;
 	if (symbol->data != -1)
 	{
-		printf("%c: %s\n", symbol->data, convert(path, 2));
+		printf("%c: %s\n", symbol->data, convert(path, 2) + 1);
 	}
 	else
 	{
