@@ -30,7 +30,7 @@ queue_t *backtracking_array(char **map, int rows, int cols,
 		strcpy(mymap[i], map[i]);
 	}
 
-	if (backtrack(mymap, rows, cols, NULL, target, start->x, start->y, path))
+	if (backtrack(mymap, rows, cols, target, start->x, start->y, path))
 	{
 		while ((point = dequeue(path)))
 			queue_push_front(reverse_path, point);
@@ -48,8 +48,19 @@ queue_t *backtracking_array(char **map, int rows, int cols,
 	return (reverse_path);
 }
 
-int backtrack(char **map, int rows, int cols, point_t const *start,
-	point_t const *target, int x, int y, queue_t *path)
+/**
+ * backtrack - uses dfs backtracking to find path
+ * @map: map character grid
+ * @rows: number of rows in map
+ * @cols: number of columns in map
+ * @target: target point
+ * @x: current x coordinate
+ * @y: current y coordinate
+ * @path: current path queue
+ * Return: 1 if target reached else 0
+ */
+int backtrack(char **map, int rows, int cols, point_t const *target,
+	int x, int y, queue_t *path)
 {
 	point_t *point;
 
@@ -65,10 +76,10 @@ int backtrack(char **map, int rows, int cols, point_t const *start,
 	printf("Checking coordinates [%d, %d]\n", x, y);
 	if (x == target->x && y == target->y)
 		return (1);
-	if (backtrack(map, rows, cols, start, target, x + 1, y, path) ||
-		backtrack(map, rows, cols, start, target, x, y + 1, path) ||
-		backtrack(map, rows, cols, start, target, x - 1, y, path) ||
-		backtrack(map, rows, cols, start, target, x, y - 1, path))
+	if (backtrack(map, rows, cols, target, x + 1, y, path) ||
+		backtrack(map, rows, cols, target, x, y + 1, path) ||
+		backtrack(map, rows, cols, target, x - 1, y, path) ||
+		backtrack(map, rows, cols, target, x, y - 1, path))
 		return (1);
 	free(dequeue(path));
 	return (0);
