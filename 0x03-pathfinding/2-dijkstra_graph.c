@@ -4,6 +4,8 @@ static int *dists;
 static vertex_t **from;
 static vertex_t **verts;
 
+#define STRDUP(x) ((str = strdup(x)) ? str : (exit(1), NULL))
+
 queue_t *dijkstra_graph(graph_t *graph, vertex_t const *start,
 	vertex_t const *target)
 {
@@ -11,6 +13,7 @@ queue_t *dijkstra_graph(graph_t *graph, vertex_t const *start,
 	vertex_t *v;
 	edge_t *e;
 	queue_t *path = queue_create();
+	char *str;
 
 	if (!graph || !start || !target || !path)
 		return (NULL);
@@ -39,9 +42,9 @@ queue_t *dijkstra_graph(graph_t *graph, vertex_t const *start,
 		dists[j] = -1;
 	}
 	if (j != -1)
-		for (queue_push_front(path, strdup(verts[j]->content));
+		for (queue_push_front(path, STRDUP(verts[j]->content));
 			j != (ssize_t)start->index; j = from[j]->index)
-			queue_push_front(path, strdup(from[j]->content));
+			queue_push_front(path, STRDUP(from[j]->content));
 	else
 		path = (free(path), NULL);
 	free(dists), free(from), free(verts);
