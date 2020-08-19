@@ -55,6 +55,7 @@ int dfs(vertex_t const *vertex)
 
 	if (g_visited[vertex->index])
 		return (0);
+	printf("Checking %s\n", vertex->content);
 	g_visited[vertex->index] = 1;
 	city = strdup(vertex->content);
 	if (!city)
