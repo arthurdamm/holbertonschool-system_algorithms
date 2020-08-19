@@ -6,6 +6,13 @@ static vertex_t **verts;
 
 #define STRDUP(x) ((str = strdup(x)) ? str : (exit(1), NULL))
 
+/**
+ * dijkstra_graph - uses Dijkstra's Algo to find path
+ * @graph: pointer to graph struct
+ * @start: pointer to starting vertex
+ * @target: pointer to target vertex
+ * Return: path queue or NULL
+ */
 queue_t *dijkstra_graph(graph_t *graph, vertex_t const *start,
 	vertex_t const *target)
 {
