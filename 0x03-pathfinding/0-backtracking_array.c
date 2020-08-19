@@ -19,7 +19,7 @@ queue_t *backtracking_array(char **map, int rows, int cols,
 
 	if (!path || !reverse_path)
 		return (NULL);
-	mymap = malloc(rows);
+	mymap = malloc(rows * sizeof(char *));
 	if (!mymap)
 		exit(1);
 	for (i = 0; i < rows; i++)
@@ -27,7 +27,8 @@ queue_t *backtracking_array(char **map, int rows, int cols,
 		mymap[i] = malloc(cols);
 		if (!mymap[i])
 			exit(1);
-		memcpy(mymap[i], map[i], cols);
+		strcpy(mymap[i], map[i]);
+		/* printf("%s\n", mymap[i]); */
 	}
 
 	if (backtrack(mymap, rows, cols, NULL, target, start->x, start->y, path))
@@ -35,6 +36,8 @@ queue_t *backtracking_array(char **map, int rows, int cols,
 		while ((point = dequeue(path)))
 			queue_push_front(reverse_path, point);
 	}
+	for (i = 0; i < rows; i++)
+		; /* printf("%s\n", mymap[i]); */
 	return (reverse_path);
 }
 
