@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 #include "queues.h"
 #include "graphs.h"
@@ -32,6 +33,9 @@ queue_t *backtracking_graph(graph_t *graph, vertex_t const *start,
 int dfs(vertex_t const *vertex);
 
 queue_t *dijkstra_graph(graph_t *graph, vertex_t const *start,
+	vertex_t const *target);
+
+queue_t *a_star_graph(graph_t *graph, vertex_t const *start,
 	vertex_t const *target);
 
 #endif
