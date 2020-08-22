@@ -8,7 +8,7 @@
  */
 nary_tree_t *nary_tree_insert(nary_tree_t *parent, char const *_str)
 {
-	nary_tree_t *new = calloc(1, sizeof(*new)), *child;
+	nary_tree_t *new = calloc(1, sizeof(*new));
 	char *str = strdup(_str);
 
 	if (!new || !str)
@@ -17,13 +17,8 @@ nary_tree_t *nary_tree_insert(nary_tree_t *parent, char const *_str)
 	new->content = str;
 	if (!parent)
 		return (new);
-	if (parent->nb_children++)
-	{
-		for (child = parent->children; child->next; child = child->next)
-			;
-		child->next = new;
-	}
-	else
-		parent->children = new;
+	new->next = parent->children;
+	parent->children = new;
+	parent->nb_children++;
 	return (new);
 }
