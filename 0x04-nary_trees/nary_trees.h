@@ -2,6 +2,7 @@
 #define NARY_TREES_H
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #define MAX(x, y) ((x) > (y) ? (x) : (y))
@@ -34,5 +35,8 @@ size_t _nary_tree_traverse(nary_tree_t const *root,
 
 size_t nary_tree_diameter(nary_tree_t const *root);
 size_t max_heights(nary_tree_t const *root);
+
+int path_exists(nary_tree_t const *root, char const * const *path);
+int _path_exists(nary_tree_t const *root, char const * const *path);
 
 #endif
