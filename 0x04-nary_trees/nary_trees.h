@@ -32,5 +32,7 @@ size_t nary_tree_traverse(nary_tree_t const *root,
 size_t _nary_tree_traverse(nary_tree_t const *root,
 	void (*action)(nary_tree_t const *node, size_t depth), size_t depth);
 
+size_t nary_tree_diameter(nary_tree_t const *root);
+size_t max_heights(nary_tree_t const *root);
 
 #endif
