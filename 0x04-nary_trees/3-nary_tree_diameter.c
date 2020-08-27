@@ -12,7 +12,7 @@ size_t nary_tree_diameter(nary_tree_t const *root)
 	if (!root)
 		return (0);
 	max_heights(root);
-	return (diameter);
+	return (diameter + 1);
 }
 
 /**
